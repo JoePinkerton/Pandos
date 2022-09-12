@@ -21,7 +21,7 @@
 */
 
 HIDDEN semd_t *semd_h, *semdFree_h;
-
+HIDDEN semd_PTR;
 
 static semd_t semdTable[MAXPROC];       /* A static list of semaphore descriptors. */
 /*
@@ -55,7 +55,19 @@ int insertBlocked(int *semAdd, pcb_PTR p){
        insertProcQ(p->p_semAdd, p);
     } else {
         /* Allocate sem descriptor from FreeList */
-
+        semd_PTR insrt = free();
+        if(insrt == NULL)
+        {
+            return TRUE;
+        }
+        insrt -> s_procQ = MkEmptyProcQ();
+        insrt -> s_next=temp->s_next;
+        temp -> s_next = insrt;
+        insertProcQ(&(insrt -> s_procQ),p);
+		p -> p_semAdd = semAdd;
+        insrt -> s_semAdd = semAdd;
+        return FALSE;
+        }
     }
 }
 
@@ -121,6 +133,19 @@ void initASL(){
     the following Semaphore node. If it's semaphore address matches the semaphore
     address for "s". If it doesn't, next the next node.
 */
+semd_PTR free(){
+semd_PTR new;
+new = semdFree_h;
+    if(semdFree_h == NULL)
+    {
+        return NULL;
+    }
+semdFree_h = semdFree_h->s_next;
+new -> s_procQ = mkEmtpyProcQ();
+new -> semAdd = NULL;
+new -> s_next = NULL;
+return new;
+}
 int search(semd_t *s){
     semd_t *finder;
     finder->s_next = dummyNode1; /* Need to figure out how to initialize dummy node */
