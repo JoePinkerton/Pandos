@@ -106,8 +106,12 @@ void insertProcQ(pcb_PTR *tp, pcb_PTR p){
         p->p_next = p;
         p->p_prev = p;
     } else {
-        /* Joe work on this */
+       p->p_next = (*tp)->p_next;
+       (*tp)->p_next->p_prev = p;
+       (*tp)->p_next = p;
+       p->p_prev = *tp
     }
+    (*tp) = p;
 }
 
 /* 
@@ -201,9 +205,19 @@ int emptyChild(pcb_PTR p) {
     Make the pcb pointed to by p a child of the pcb pointed to by prnt.
 */
 void insertChild (pcb_PTR prnt, pcb_PTR p){
-    /* p->p_child = prnt; */
+    /* if it is alone */
+    if(emptyChild(prnt))
+    {
     p->p_prnt = prnt;
     prnt->p_child = p;
+    }
+    else{
+    prnt->p_child->p_sib_prev=p;
+    p->p_sib_next = prnt - p_child;
+    /* set null */
+    p->p_sib_prev = NULL;
+    prnt -> p_child = p;
+    p -> p_prnt = prnt;
 }
 
 /* 
