@@ -270,35 +270,28 @@ pcb_PTR removeChild(pcb_PTR p){
     its parent. 
 */       
 pcb_PTR outChild(pcb_PTR p){
-    if(p->p_prnt == NULL){
-        return NULL;
-    } 
+   if(p->p_prnt == NULL || p == NULL)
+   {
+	   return NULL;
+   }
+   if(p->p_prnt->p_child == p)
+   {
+	   return removeChild(p-p_prnt);
+   }
+   if(p->p_sibn == NULL)
+   {
+	   p->p_sibp->p_sibn = NULL;
+	   p->p_prnt = NULL;
+	   return p;
+   }
+   if (p->p_sibp != NULL || p->p_sibn != NULL)
+   {
+	   p->p_sibn->p_sibp = p->p_sibp;
+	   p->p_sibp->p_sibn = p->p_sibn;
+	   p->p_prnt = NULL;
+	   return p;
+   }
+	return NULL;
     
-    /* if p is the only child */
-    else if(p->p_sibp == NULL && p->p_sibn == NULL){
-        p->p_prnt->p_child = NULL;
-        p->p_prnt = NULL;
-        return p;
-    } 
-
-    /* if p is in the middle */
-    else if(p->p_sibn != NULL && p->p_sibp != NULL){
-        p->p_prnt->p_child = NULL;
-        p->p_prnt = NULL;
-        p->p_sibp = p->p_sibn;
-        return p;
-    }
-
-    /* if p is the first child */
-    else if(p->p_sibp == NULL && p->p_sibn != NULL){
-        return removeChild(p);
-    }
-
-    /* if p is the last child */
-    else if(p->p_sibp != NULL && p->p_sibn == NULL){
-        p->p_prnt->p_child = NULL;
-        p->p_prnt = NULL;
-        p->p_sibp = NULL;
-        return p;
-    }
+    
 }
