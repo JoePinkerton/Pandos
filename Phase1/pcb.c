@@ -239,26 +239,23 @@ void insertChild (pcb_PTR prnt, pcb_PTR p){
 pcb_PTR removeChild(pcb_PTR p){
     if(emptyChild(p)){
         return NULL;
-    } else{
+    }
         pcb_PTR temp = p->p_child;
-
-        /* only has one child */
-        if(p->p_child->p_sibn == NULL){
-            p->p_child = NULL;
-            p->p_child->p_prnt = NULL;
-	        p->p_child->p_sibn = NULL;
-	        p->p_child->p_sibp = NULL;
-        }    
-        
-        /* has siblings */
-        else{
-            p->p_child = p->p_child->p_sibn;
-            p->p_child->p_prev = NULL;
-            p->p_child->p_prnt = NULL;
-		p->p_child->p_sibn = NULL;
-		p->p_child->p_sibp = NULL;
-        }
-        return temp;
+	if (p -> p_child - p_sib_next != NULL)
+	{
+		p -> p_child  = p -> p_child  -> p_sib_next;
+		p -> p_child -> p_sib_prev == NULL;
+		tempChild -> p_prnt = NULL;
+		tempChild -> p_sib_next = NULL;
+		tempChild -> p_sib_prev = NULL;
+	}
+	else {
+		p -> p_child = NULL;
+		tempChild -> p_prnt = NULL;
+		tempChild -> p_sib_next = NULL;
+		tempChild -> p_sib_prev = NULL;
+	}
+	return temp;
     }
 }
 
